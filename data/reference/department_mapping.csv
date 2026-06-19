@@ -1,0 +1,45 @@
+source_system,source_department,standard_department
+globaltech_hris,Engineering,Engineering
+globaltech_hris,Marketing,Marketing
+globaltech_hris,Human Resources,Human Resources
+globaltech_hris,Finance,Finance
+globaltech_hris,Sales,Sales
+globaltech_hris,Operations,Operations
+globaltech_hris,Manufacturing,Manufacturing
+globaltech_hris,Strategy,Strategy
+globaltech_hris,Product,Product
+globaltech_hris,Legal,Legal
+globaltech_hris,IT,Information Technology
+globaltech_hris,Information Technology,Information Technology
+globaltech_hris,Customer Support,Customer Support
+globaltech_hris,Data,Data
+globaltech_hris,Security,Security
+globaltech_hris,Data Science,Data
+globaltech_hris,DevOps,Engineering
+globaltech_hris,Business Development,Sales
+globaltech_hris,Communications,Marketing
+globaltech_hris,Customer Success,Customer Support
+globaltech_hris,Quality Assurance,Engineering
+globaltech_hris,Supply Chain,Operations
+acquiredco_hris,Engineering,Engineering
+acquiredco_hris,Marketing,Marketing
+acquiredco_hris,Human Resources,Human Resources
+acquiredco_hris,Finance,Finance
+acquiredco_hris,Sales,Sales
+acquiredco_hris,Operations,Operations
+acquiredco_hris,Manufacturing,Manufacturing
+acquiredco_hris,Strategy,Strategy
+acquiredco_hris,Product,Product
+acquiredco_hris,Legal,Legal
+acquiredco_hris,IT,Information Technology
+acquiredco_hris,Information Technology,Information Technology
+acquiredco_hris,Customer Support,Customer Support
+acquiredco_hris,Data,Data
+acquiredco_hris,Security,Security
+acquiredco_hris,Data Science,Data
+acquiredco_hris,DevOps,Engineering
+acquiredco_hris,Business Development,Sales
+acquiredco_hris,Communications,Marketing
+acquiredco_hris,Customer Success,Customer Support
+acquiredco_hris,Quality Assurance,Engineering
+acquiredco_hris,Supply Chain,Operations
