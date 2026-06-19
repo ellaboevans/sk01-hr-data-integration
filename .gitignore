@@ -1,0 +1,5 @@
+# Ignore all compiled Python bytecode
+*.pyc
+
+# Ignore the entire cache directory where Python 3 saves them
+__pycache__/
