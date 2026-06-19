@@ -18,11 +18,21 @@ RAW_FILES = {
     "benefits": RAW_DATA_DIR / "benefits_enrollment.xml"
 }
 
+REFERENCE_FILES = {
+    "department_mapping": REFERENCE_DATA_DIR / "department_mapping.csv",
+}
+
 SOURCE_PRIORITY = {
     "globaltech_hris": 1,
     "acquiredco_hris": 1,
     "payroll": 2,
     "benefits": 3
+}
+
+EXCHANGE_RATES_TO_USD = {
+    "USD": 1.00,
+    "EUR": 1.08,
+    "GBP": 1.27,
 }
 
 COMPANY_PREFIXES ={
