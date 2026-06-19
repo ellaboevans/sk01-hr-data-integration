@@ -1,161 +1,32 @@
-2026-06-18 13:11:04 - hr_pipeline.ingest - INFO - Loaded 15000 from globaltech_hris
-2026-06-18 13:11:04 - hr_pipeline.ingest - INFO - Loaded total 3200 records from acquiredco_hris
-2026-06-18 13:11:04 - hr_pipeline.ingest - ERROR - Failed to ingest payroll from /Users/user/Desktop/data-engineering/sk01-hr-data-integration/data/raw/payroll_data.xlsx: `Import openpyxl` failed.  Use pip or conda to install the openpyxl package.
-Traceback (most recent call last):
-  File "/Users/user/Desktop/data-engineering/sk01-hr-data-integration/.venv/lib/python3.14/site-packages/pandas/compat/_optional.py", line 158, in import_optional_dependency
-    module = importlib.import_module(name)
-  File "/opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/lib/python3.14/importlib/__init__.py", line 88, in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<frozen importlib._bootstrap>", line 1406, in _gcd_import
-  File "<frozen importlib._bootstrap>", line 1371, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 1335, in _find_and_load_unlocked
-ModuleNotFoundError: No module named 'openpyxl'
-
-The above exception was the direct cause of the following exception:
-
-Traceback (most recent call last):
-  File "/Users/user/Desktop/data-engineering/sk01-hr-data-integration/src/hr_pipeline/ingest.py", line 123, in ingest_payroll
-    df = pd.read_excel(file_path)
-  File "/Users/user/Desktop/data-engineering/sk01-hr-data-integration/.venv/lib/python3.14/site-packages/pandas/io/excel/_base.py", line 481, in read_excel
-    io = ExcelFile(
-        io,
-    ...<2 lines>...
-        engine_kwargs=engine_kwargs,
-    )
-  File "/Users/user/Desktop/data-engineering/sk01-hr-data-integration/.venv/lib/python3.14/site-packages/pandas/io/excel/_base.py", line 1621, in __init__
-    self._reader = self._engines[engine](
-                   ~~~~~~~~~~~~~~~~~~~~~^
-        self._io,
-        ^^^^^^^^^
-        storage_options=storage_options,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        engine_kwargs=engine_kwargs,
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/Users/user/Desktop/data-engineering/sk01-hr-data-integration/.venv/lib/python3.14/site-packages/pandas/io/excel/_openpyxl.py", line 559, in __init__
-    import_optional_dependency("openpyxl")
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/Users/user/Desktop/data-engineering/sk01-hr-data-integration/.venv/lib/python3.14/site-packages/pandas/compat/_optional.py", line 161, in import_optional_dependency
-    raise ImportError(msg) from err
-ImportError: `Import openpyxl` failed.  Use pip or conda to install the openpyxl package.
-2026-06-18 13:11:04 - hr_pipeline.ingest - INFO - Loaded 0 records from benefits
-2026-06-18 13:11:04 - hr_pipeline.ingest - INFO - Ingestion summary | globaltech_hris | rows=15000 | columns=11
-2026-06-18 13:11:04 - hr_pipeline.ingest - INFO - Ingestion summary | acquiredco_hris | rows=3200 | columns=7
-2026-06-18 13:11:04 - hr_pipeline.ingest - INFO - Ingestion summary | payroll | rows=0 | columns=0
-2026-06-18 13:11:04 - hr_pipeline.ingest - INFO - Ingestion summary | benefits | rows=0 | columns=1
-2026-06-18 13:16:53 - hr_pipeline.ingest - INFO - Loaded 15000 from globaltech_hris
-2026-06-18 13:16:53 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1 to 500
-2026-06-18 13:16:53 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 501 to 1000
-2026-06-18 13:16:53 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1001 to 1500
-2026-06-18 13:16:53 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1501 to 2000
-2026-06-18 13:16:53 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2001 to 2500
-2026-06-18 13:16:53 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2501 to 3000
-2026-06-18 13:16:53 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 3001 to 3200
-2026-06-18 13:16:53 - hr_pipeline.ingest - INFO - Loaded total 3200 records from acquiredco_hris
-2026-06-18 13:16:54 - hr_pipeline.ingest - INFO - Loaded 19000 records from payroll
-2026-06-18 13:16:54 - hr_pipeline.ingest - INFO - Loaded 0 records from benefits
-2026-06-18 13:16:54 - hr_pipeline.ingest - INFO - Ingestion summary | globaltech_hris | rows=15000 | columns=11
-2026-06-18 13:16:54 - hr_pipeline.ingest - INFO - Ingestion summary | acquiredco_hris | rows=3200 | columns=7
-2026-06-18 13:16:54 - hr_pipeline.ingest - INFO - Ingestion summary | payroll | rows=19000 | columns=8
-2026-06-18 13:16:54 - hr_pipeline.ingest - INFO - Ingestion summary | benefits | rows=0 | columns=1
-2026-06-18 13:19:14 - hr_pipeline.ingest - INFO - Loaded 15000 from globaltech_hris
-2026-06-18 13:19:14 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1 to 500
-2026-06-18 13:19:14 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 501 to 1000
-2026-06-18 13:19:14 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1001 to 1500
-2026-06-18 13:19:14 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1501 to 2000
-2026-06-18 13:19:14 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2001 to 2500
-2026-06-18 13:19:14 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2501 to 3000
-2026-06-18 13:19:14 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 3001 to 3200
-2026-06-18 13:19:14 - hr_pipeline.ingest - INFO - Loaded total 3200 records from acquiredco_hris
-2026-06-18 13:19:15 - hr_pipeline.ingest - INFO - Loaded 19000 records from payroll
-2026-06-18 13:19:15 - hr_pipeline.ingest - INFO - Loaded 12000 records from benefits
-2026-06-18 13:19:15 - hr_pipeline.ingest - INFO - Ingestion summary | globaltech_hris | rows=15000 | columns=11
-2026-06-18 13:19:15 - hr_pipeline.ingest - INFO - Ingestion summary | acquiredco_hris | rows=3200 | columns=7
-2026-06-18 13:19:15 - hr_pipeline.ingest - INFO - Ingestion summary | payroll | rows=19000 | columns=8
-2026-06-18 13:19:15 - hr_pipeline.ingest - INFO - Ingestion summary | benefits | rows=12000 | columns=7
-2026-06-18 13:32:06 - hr_pipeline.ingest - INFO - Loaded 15000 from globaltech_hris
-2026-06-18 13:32:06 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1 to 500
-2026-06-18 13:32:06 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 501 to 1000
-2026-06-18 13:32:06 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1001 to 1500
-2026-06-18 13:32:06 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1501 to 2000
-2026-06-18 13:32:06 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2001 to 2500
-2026-06-18 13:32:06 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2501 to 3000
-2026-06-18 13:32:06 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 3001 to 3200
-2026-06-18 13:32:06 - hr_pipeline.ingest - INFO - Loaded total 3200 records from acquiredco_hris
-2026-06-18 13:32:07 - hr_pipeline.ingest - INFO - Loaded 19000 records from payroll
-2026-06-18 13:32:07 - hr_pipeline.ingest - INFO - Loaded 12000 records from benefits
-2026-06-18 13:32:07 - hr_pipeline.ingest - INFO - Ingestion summary | globaltech_hris | rows=15000 | columns=11
-2026-06-18 13:32:07 - hr_pipeline.ingest - INFO - Ingestion summary | acquiredco_hris | rows=3200 | columns=7
-2026-06-18 13:32:07 - hr_pipeline.ingest - INFO - Ingestion summary | payroll | rows=19000 | columns=8
-2026-06-18 13:32:07 - hr_pipeline.ingest - INFO - Ingestion summary | benefits | rows=12000 | columns=7
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Loaded 15000 from globaltech_hris
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1 to 500
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 501 to 1000
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1001 to 1500
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1501 to 2000
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2001 to 2500
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2501 to 3000
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 3001 to 3200
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Loaded total 3200 records from acquiredco_hris
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Loaded 19000 records from payroll
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Loaded 12000 records from benefits
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Ingestion summary | globaltech_hris | rows=15000 | columns=11
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Ingestion summary | acquiredco_hris | rows=3200 | columns=7
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Ingestion summary | payroll | rows=19000 | columns=8
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Ingestion summary | benefits | rows=12000 | columns=7
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Aligned 15000 GlobalTech HRIS records to standard schema
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Aligned AcquiredCo HRIS to standard schema with 3200 records
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Aligned 19000 payroll records to standard schema
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Aligned 12000 benefits records to standard schema
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Schema alignment summary | globaltech_hris | rows=15000 | columns=23
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Schema alignment summary | acquiredco_hris | rows=3200 | columns=23
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Schema alignment summary | payroll | rows=19000 | columns=23
-2026-06-18 14:27:55 - hr_pipeline.ingest - INFO - Schema alignment summary | benefits | rows=12000 | columns=23
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Loaded 15000 from globaltech_hris
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1 to 500
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 501 to 1000
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1001 to 1500
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1501 to 2000
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2001 to 2500
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2501 to 3000
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 3001 to 3200
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Loaded total 3200 records from acquiredco_hris
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Loaded 19000 records from payroll
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Loaded 12000 records from benefits
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Ingestion summary | globaltech_hris | rows=15000 | columns=11
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Ingestion summary | acquiredco_hris | rows=3200 | columns=7
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Ingestion summary | payroll | rows=19000 | columns=8
-2026-06-18 16:42:57 - hr_pipeline.ingest - INFO - Ingestion summary | benefits | rows=12000 | columns=7
-2026-06-18 16:42:58 - hr_pipeline.ingest - INFO - Aligned 15000 GlobalTech HRIS records to standard schema
-2026-06-18 16:42:58 - hr_pipeline.ingest - INFO - Aligned AcquiredCo HRIS to standard schema with 3200 records
-2026-06-18 16:42:58 - hr_pipeline.ingest - INFO - Aligned 19000 payroll records to standard schema
-2026-06-18 16:42:58 - hr_pipeline.ingest - INFO - Aligned 12000 benefits records to standard schema
-2026-06-18 16:42:58 - hr_pipeline.ingest - INFO - Schema alignment summary | globaltech_hris | rows=15000 | columns=23
-2026-06-18 16:42:58 - hr_pipeline.ingest - INFO - Schema alignment summary | acquiredco_hris | rows=3200 | columns=23
-2026-06-18 16:42:58 - hr_pipeline.ingest - INFO - Schema alignment summary | payroll | rows=19000 | columns=23
-2026-06-18 16:42:58 - hr_pipeline.ingest - INFO - Schema alignment summary | benefits | rows=12000 | columns=23
-2026-06-19 08:27:35 - hr_pipeline.ingest - INFO - Loaded 15000 from globaltech_hris
-2026-06-19 08:27:35 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1 to 500
-2026-06-19 08:27:35 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 501 to 1000
-2026-06-19 08:27:35 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1001 to 1500
-2026-06-19 08:27:35 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1501 to 2000
-2026-06-19 08:27:35 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2001 to 2500
-2026-06-19 08:27:35 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2501 to 3000
-2026-06-19 08:27:35 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 3001 to 3200
-2026-06-19 08:27:35 - hr_pipeline.ingest - INFO - Loaded total 3200 records from acquiredco_hris
-2026-06-19 08:27:35 - hr_pipeline.ingest - INFO - Loaded 19000 records from payroll
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Loaded 12000 records from benefits
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Ingestion summary | globaltech_hris | rows=15000 | columns=11
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Ingestion summary | acquiredco_hris | rows=3200 | columns=7
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Ingestion summary | payroll | rows=19000 | columns=8
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Ingestion summary | benefits | rows=12000 | columns=7
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Aligned 15000 GlobalTech HRIS records to standard schema
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Aligned AcquiredCo HRIS to standard schema with 3200 records
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Aligned 19000 payroll records to standard schema
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Aligned 12000 benefits records to standard schema
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Schema alignment summary | globaltech_hris | rows=15000 | columns=23
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Schema alignment summary | acquiredco_hris | rows=3200 | columns=23
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Schema alignment summary | payroll | rows=19000 | columns=23
-2026-06-19 08:27:36 - hr_pipeline.ingest - INFO - Schema alignment summary | benefits | rows=12000 | columns=23
+2026-06-19 10:39:09 - hr_pipeline.ingest - INFO - Loaded 15000 from globaltech_hris
+2026-06-19 10:39:09 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1 to 500
+2026-06-19 10:39:09 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 501 to 1000
+2026-06-19 10:39:09 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1001 to 1500
+2026-06-19 10:39:09 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1501 to 2000
+2026-06-19 10:39:09 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2001 to 2500
+2026-06-19 10:39:09 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2501 to 3000
+2026-06-19 10:39:09 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 3001 to 3200
+2026-06-19 10:39:09 - hr_pipeline.ingest - INFO - Loaded total 3200 records from acquiredco_hris
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Loaded 19000 records from payroll
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Loaded 12000 records from benefits
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Ingestion summary | globaltech_hris | rows=15000 | columns=11
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Ingestion summary | acquiredco_hris | rows=3200 | columns=7
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Ingestion summary | payroll | rows=19000 | columns=8
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Ingestion summary | benefits | rows=12000 | columns=7
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Aligned 15000 GlobalTech HRIS records to standard schema
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Aligned AcquiredCo HRIS to standard schema with 3200 records
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Aligned 19000 payroll records to standard schema
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Aligned 12000 benefits records to standard schema
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Schema alignment summary | globaltech_hris | rows=15000 | columns=23
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Schema alignment summary | acquiredco_hris | rows=3200 | columns=23
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Schema alignment summary | payroll | rows=19000 | columns=23
+2026-06-19 10:39:10 - hr_pipeline.ingest - INFO - Schema alignment summary | benefits | rows=12000 | columns=23
+2026-06-19 10:39:10 - hr_pipeline.clean - INFO - Loaded 44 department mapping rows
+2026-06-19 10:39:12 - hr_pipeline.clean - INFO - Department mapping completed | rows=15000 | unmapped_unique_departments=0
+2026-06-19 10:39:12 - hr_pipeline.clean - INFO - Applied core cleaning rules to 15000 records
+2026-06-19 10:39:12 - hr_pipeline.clean - INFO - Department mapping completed | rows=3200 | unmapped_unique_departments=0
+2026-06-19 10:39:12 - hr_pipeline.clean - INFO - Applied core cleaning rules to 3200 records
+2026-06-19 10:39:15 - hr_pipeline.clean - INFO - Department mapping completed | rows=19000 | unmapped_unique_departments=0
+2026-06-19 10:39:15 - hr_pipeline.clean - INFO - Applied core cleaning rules to 19000 records
+2026-06-19 10:39:16 - hr_pipeline.clean - INFO - Department mapping completed | rows=12000 | unmapped_unique_departments=0
+2026-06-19 10:39:16 - hr_pipeline.clean - INFO - Applied core cleaning rules to 12000 records
