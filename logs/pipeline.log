@@ -963,3 +963,57 @@
 2026-06-21 15:40:29 - hr_pipeline.visualize - INFO - Exported chart to /Users/user/Desktop/data-engineering/sk01-hr-data-integration/data/reports/figures/benefits_enrollment_rate_by_department.png
 2026-06-21 15:40:30 - hr_pipeline.visualize - INFO - Exported chart to /Users/user/Desktop/data-engineering/sk01-hr-data-integration/data/reports/figures/data_quality_summary.png
 2026-06-21 15:40:30 - hr_pipeline.visualize - INFO - Generated all EDA charts
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Loaded 15000 from globaltech_hris
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1 to 500
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 501 to 1000
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1001 to 1500
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 1501 to 2000
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2001 to 2500
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 2501 to 3000
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Loaded simulated page for acquiredco_hris: records 3001 to 3200
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Loaded total 3200 records from acquiredco_hris
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Loaded 19000 records from payroll
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Loaded 12000 records from benefits
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Ingestion summary | globaltech_hris | rows=15000 | columns=11
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Ingestion summary | acquiredco_hris | rows=3200 | columns=7
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Ingestion summary | payroll | rows=19000 | columns=8
+2026-06-21 16:52:04 - hr_pipeline.ingest - INFO - Ingestion summary | benefits | rows=12000 | columns=7
+2026-06-21 16:52:05 - hr_pipeline.ingest - INFO - Aligned 15000 GlobalTech HRIS records to standard schema
+2026-06-21 16:52:05 - hr_pipeline.ingest - INFO - Aligned AcquiredCo HRIS to standard schema with 3200 records
+2026-06-21 16:52:05 - hr_pipeline.ingest - INFO - Aligned 19000 payroll records to standard schema
+2026-06-21 16:52:05 - hr_pipeline.ingest - INFO - Aligned 12000 benefits records to standard schema
+2026-06-21 16:52:05 - hr_pipeline.ingest - INFO - Schema alignment summary | globaltech_hris | rows=15000 | columns=23
+2026-06-21 16:52:05 - hr_pipeline.ingest - INFO - Schema alignment summary | acquiredco_hris | rows=3200 | columns=23
+2026-06-21 16:52:05 - hr_pipeline.ingest - INFO - Schema alignment summary | payroll | rows=19000 | columns=23
+2026-06-21 16:52:05 - hr_pipeline.ingest - INFO - Schema alignment summary | benefits | rows=12000 | columns=23
+2026-06-21 16:52:05 - hr_pipeline.clean - INFO - Loaded 44 department mapping rows
+2026-06-21 16:52:06 - hr_pipeline.clean - INFO - Department mapping completed | rows=15000 | unmapped_unique_departments=0
+2026-06-21 16:52:06 - hr_pipeline.clean - INFO - Applied core cleaning rules to 15000 records
+2026-06-21 16:52:07 - hr_pipeline.clean - INFO - Department mapping completed | rows=3200 | unmapped_unique_departments=0
+2026-06-21 16:52:07 - hr_pipeline.clean - INFO - Applied core cleaning rules to 3200 records
+2026-06-21 16:52:09 - hr_pipeline.clean - INFO - Department mapping completed | rows=19000 | unmapped_unique_departments=0
+2026-06-21 16:52:09 - hr_pipeline.clean - INFO - Applied core cleaning rules to 19000 records
+2026-06-21 16:52:11 - hr_pipeline.clean - INFO - Department mapping completed | rows=12000 | unmapped_unique_departments=0
+2026-06-21 16:52:11 - hr_pipeline.clean - INFO - Applied core cleaning rules to 12000 records
+2026-06-21 16:52:11 - hr_pipeline.dedup - INFO - Combined cleaned sources into 49200 total records
+2026-06-21 16:52:11 - hr_pipeline.dedup - WARNING - Duplicate HRIS employee_id records found: duplicate_rows=398 duplicate_employee_ids=199
+2026-06-21 16:52:11 - hr_pipeline.dedup - INFO - HRIS identity records: 18001
+2026-06-21 16:52:11 - hr_pipeline.dedup - INFO - Enrichment records: 31000
+2026-06-21 16:52:11 - hr_pipeline.dedup - INFO - Matched enrichment records: 31000
+2026-06-21 16:52:11 - hr_pipeline.dedup - INFO - Ghost enrichment records: 0
+2026-06-21 16:52:12 - hr_pipeline.dedup - INFO - Build exact-ID golden dataset with 18001 records
+2026-06-21 16:52:12 - hr_pipeline.dedup - INFO - Duplicate employee_id records found: 0
+2026-06-21 16:52:13 - hr_pipeline.dedup - INFO - Cross-company duplicate email records found: 0
+2026-06-21 16:52:15 - hr_pipeline.dedup - INFO - Same-name cross-company probable matches found within 30 days: 83
+2026-06-21 16:52:25 - hr_pipeline.dedup - INFO - Fuzzy name probable matches found | threshold=88 | hire_date_window_days=30 | matches=113
+2026-06-21 16:52:25 - hr_pipeline.validate - INFO - Validation completed | checks=14 | failed_checks=1
+2026-06-21 16:52:25 - hr_pipeline.validate - INFO - Exported validation report to /Users/user/Desktop/data-engineering/sk01-hr-data-integration/data/reports/data_quality_validation_report.csv
+2026-06-21 16:52:25 - hr_pipeline.validate - INFO - Exported validation report to /Users/user/Desktop/data-engineering/sk01-hr-data-integration/data/reports/data_quality_validation_report.html
+2026-06-21 16:52:25 - hr_pipeline.validate - INFO - Exported failed validation records to /Users/user/Desktop/data-engineering/sk01-hr-data-integration/data/reports/salary_usd_annual_range_failures.csv
+2026-06-21 16:52:26 - hr_pipeline.visualize - INFO - Exported chart to /Users/user/Desktop/data-engineering/sk01-hr-data-integration/data/reports/figures/headcount_by_department.png
+2026-06-21 16:52:26 - hr_pipeline.visualize - INFO - Exported chart to /Users/user/Desktop/data-engineering/sk01-hr-data-integration/data/reports/figures/headcount_by_country.png
+2026-06-21 16:52:27 - hr_pipeline.visualize - INFO - Exported chart to /Users/user/Desktop/data-engineering/sk01-hr-data-integration/data/reports/figures/salary_by_employment_type.png
+2026-06-21 16:52:27 - hr_pipeline.visualize - INFO - Exported chart to /Users/user/Desktop/data-engineering/sk01-hr-data-integration/data/reports/figures/tenure_distribution.png
+2026-06-21 16:52:27 - hr_pipeline.visualize - INFO - Exported chart to /Users/user/Desktop/data-engineering/sk01-hr-data-integration/data/reports/figures/benefits_enrollment_rate_by_department.png
+2026-06-21 16:52:27 - hr_pipeline.visualize - INFO - Exported chart to /Users/user/Desktop/data-engineering/sk01-hr-data-integration/data/reports/figures/data_quality_summary.png
+2026-06-21 16:52:27 - hr_pipeline.visualize - INFO - Generated all EDA charts
