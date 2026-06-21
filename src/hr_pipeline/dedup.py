@@ -96,6 +96,24 @@ def deduplicate_hris_identity_records(
         subset=["employee_id"],
         keep="first",
     ).drop(columns=["_identity_completeness_score"])
+    
+    kept_keys = set(
+        deduplicated[["employee_id", "source_system", "email", "hire_date"]]
+        .astype(str)
+        .agg("|".join, axis=1)
+    )
+
+    duplicate_review["_review_key"] = (
+        duplicate_review[["employee_id", "source_system", "email", "hire_date"]]
+        .astype(str)
+        .agg("|".join, axis=1)
+    )
+
+    duplicate_review["kept_in_golden"] = duplicate_review["_review_key"].isin(
+        kept_keys
+    )
+
+    duplicate_review = duplicate_review.drop(columns=["_review_key"])
 
     logger.warning(
         "Duplicate HRIS employee_id records found: duplicate_rows=%s duplicate_employee_ids=%s",
@@ -105,7 +123,7 @@ def deduplicate_hris_identity_records(
 
     return deduplicated, duplicate_review
 
-def build_exact_id_golden_dataset(combined: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def build_exact_id_golden_dataset(combined: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Build an initial golden employee dataset using exact employee_id matching.
 
@@ -135,7 +153,7 @@ def build_exact_id_golden_dataset(combined: pd.DataFrame) -> tuple[pd.DataFrame,
         ]
     )
     
-    hris_records, _ = deduplicate_hris_identity_records(
+    hris_records, duplicate_hris_records = deduplicate_hris_identity_records(
         hris_records
     )
     
@@ -203,7 +221,7 @@ def build_exact_id_golden_dataset(combined: pd.DataFrame) -> tuple[pd.DataFrame,
             f"Golden dataset contains duplicate employee_id values: {duplicate_golden_ids}"
         )
     
-    return golden, ghost_records
+    return golden, ghost_records, duplicate_hris_records
 
 
 def summarize_payroll_records(enrichment_records: pd.DataFrame) -> pd.DataFrame:
