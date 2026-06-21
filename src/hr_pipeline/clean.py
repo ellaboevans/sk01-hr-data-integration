@@ -92,7 +92,6 @@ def normalize_employee_id(value: object, company_origin: object) -> object:
 
     return f"{prefix}-{numeric_id:06d}"
 
-
 def normalize_manager_id(value: object, company_origin: object) -> object:
     """
     Normalize manager IDs to match the employee ID format.
