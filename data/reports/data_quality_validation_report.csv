@@ -1,0 +1,15 @@
+check,description,total,passed,failed,pass_rate,status
+employee_id_not_null,employee_id must not be null,18001,18001,0,100.0,PASS
+employee_id_unique,employee_id should be unique across the dataset,18001,18001,0,100.0,PASS
+employee_id_format,employee_id must match GT-000001 or AC-000001 format,18001,18001,0,100.0,PASS
+full_name_not_null,full_name must not be null,18001,18001,0,100.0,PASS
+email_not_null,email must not be null,18001,18001,0,100.0,PASS
+email_format,email must be in a valid format,18001,18001,0,100.0,PASS
+company_origin_allowed,company_origin must be GlobalTech or AcquiredCo,18001,18001,0,100.0,PASS
+employment_type_allowed,"employment_type must be Full-Time, Part-Time, or Contractor",18001,18001,0,100.0,PASS
+department_standardized_not_null,department_standardized must not be null,18001,18001,0,100.0,PASS
+hire_date_not_null,hire_date must not be null,18001,18001,0,100.0,PASS
+hire_date_plausible_range,hire_date must be between 1990-01-01 and today,18001,18001,0,100.0,PASS
+salary_usd_annual_range,"salary_usd_annual must be between 20,000 and 2,000,000 when present",18001,14997,3004,83.31,FAIL
+manager_id_referential_integrity,manager_id must refer to an employee_id in the golden dataset when present,18001,18001,0,100.0,PASS
+benefits_enrolled_boolean,benefits_enrolled must be boolean,18001,18001,0,100.0,PASS

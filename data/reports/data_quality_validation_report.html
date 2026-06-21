@@ -1,0 +1,141 @@
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>check</th>
+      <th>description</th>
+      <th>total</th>
+      <th>passed</th>
+      <th>failed</th>
+      <th>pass_rate</th>
+      <th>status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>employee_id_not_null</td>
+      <td>employee_id must not be null</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>employee_id_unique</td>
+      <td>employee_id should be unique across the dataset</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>employee_id_format</td>
+      <td>employee_id must match GT-000001 or AC-000001 format</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>full_name_not_null</td>
+      <td>full_name must not be null</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>email_not_null</td>
+      <td>email must not be null</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>email_format</td>
+      <td>email must be in a valid format</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>company_origin_allowed</td>
+      <td>company_origin must be GlobalTech or AcquiredCo</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>employment_type_allowed</td>
+      <td>employment_type must be Full-Time, Part-Time, or Contractor</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>department_standardized_not_null</td>
+      <td>department_standardized must not be null</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>hire_date_not_null</td>
+      <td>hire_date must not be null</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>hire_date_plausible_range</td>
+      <td>hire_date must be between 1990-01-01 and today</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>salary_usd_annual_range</td>
+      <td>salary_usd_annual must be between 20,000 and 2,000,000 when present</td>
+      <td>18001</td>
+      <td>14997</td>
+      <td>3004</td>
+      <td>83.31</td>
+      <td>FAIL</td>
+    </tr>
+    <tr>
+      <td>manager_id_referential_integrity</td>
+      <td>manager_id must refer to an employee_id in the golden dataset when present</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+    <tr>
+      <td>benefits_enrolled_boolean</td>
+      <td>benefits_enrolled must be boolean</td>
+      <td>18001</td>
+      <td>18001</td>
+      <td>0</td>
+      <td>100.00</td>
+      <td>PASS</td>
+    </tr>
+  </tbody>
+</table>
