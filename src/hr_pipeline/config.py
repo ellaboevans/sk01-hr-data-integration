@@ -7,7 +7,7 @@ RAW_DATA_DIR = DATA_DIR / "raw"
 REFERENCE_DATA_DIR = DATA_DIR / "reference"
 INTERIM_DATA_DIR = DATA_DIR / "interim"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
-REPORTS_DIR = DATA_DIR / "reports"
+REPORTS_DATA_DIR = DATA_DIR / "reports"
 
 LOG_DIR = PROJECT_ROOT / "logs"
 
