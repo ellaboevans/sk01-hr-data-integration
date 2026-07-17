@@ -48,6 +48,9 @@ def deduplicate_hris_identity_records(
     - Prefer rows with more populated identity fields.
     - Then keep the first stable record by employee_id/source_system.
     """
+    hris_records = hris_records.copy()
+    hris_records["_dedup_row_id"] = range(len(hris_records))
+
     duplicate_mask = hris_records.duplicated(
         subset=["employee_id"],
         keep=False,
@@ -58,7 +61,10 @@ def deduplicate_hris_identity_records(
 
     if duplicate_review.empty:
         logger.info("No duplicate HRIS employee_id records found")
-        return hris_records, duplicate_review
+        return (
+            hris_records.drop(columns=["_dedup_row_id"]),
+            duplicate_review.drop(columns=["_dedup_row_id"]),
+        )
 
     identity_quality_columns = [
         "full_name",
@@ -77,7 +83,6 @@ def deduplicate_hris_identity_records(
         if column in hris_records.columns
     ]
 
-    hris_records = hris_records.copy()
     hris_records["_identity_completeness_score"] = hris_records[
         available_quality_columns
     ].notna().sum(axis=1)
@@ -87,8 +92,9 @@ def deduplicate_hris_identity_records(
             "employee_id",
             "_identity_completeness_score",
             "source_system",
+            "_dedup_row_id",
         ],
-        ascending=[True, False, True],
+        ascending=[True, False, True, True],
     )
 
     deduplicated = hris_records.drop_duplicates(
@@ -96,23 +102,13 @@ def deduplicate_hris_identity_records(
         keep="first",
     ).drop(columns=["_identity_completeness_score"])
     
-    kept_keys = set(
-        deduplicated[["employee_id", "source_system", "email", "hire_date"]]
-        .astype(str)
-        .agg("|".join, axis=1)
+    kept_row_ids = set(deduplicated["_dedup_row_id"])
+    duplicate_review["kept_in_golden"] = duplicate_review["_dedup_row_id"].isin(
+        kept_row_ids
     )
 
-    duplicate_review["_review_key"] = (
-        duplicate_review[["employee_id", "source_system", "email", "hire_date"]]
-        .astype(str)
-        .agg("|".join, axis=1)
-    )
-
-    duplicate_review["kept_in_golden"] = duplicate_review["_review_key"].isin(
-        kept_keys
-    )
-
-    duplicate_review = duplicate_review.drop(columns=["_review_key"])
+    deduplicated = deduplicated.drop(columns=["_dedup_row_id"])
+    duplicate_review = duplicate_review.drop(columns=["_dedup_row_id"])
 
     logger.warning(
         "Duplicate HRIS employee_id records found: duplicate_rows=%s duplicate_employee_ids=%s",
@@ -206,10 +202,11 @@ def build_exact_id_golden_dataset(combined: pd.DataFrame) -> tuple[pd.DataFrame,
         how="left",
     )
     
-    golden["source_systems"] =golden["source_systems"].fillna(golden["source_system"])
+    golden["source_systems"] = golden["source_systems"].fillna(
+        golden["source_system"]
+    )
     golden["benefits_enrolled"] = golden["benefits_enrolled"].fillna(False)
-    golden[golden["employee_id"].str.endswith("000000", na=False)]
-    golden["dedup_method"] = 'exact_employee_id'
+    golden["dedup_method"] = "exact_employee_id"
     
     logger.info("Build exact-ID golden dataset with %s records", len(golden))
     
