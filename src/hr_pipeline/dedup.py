@@ -3,7 +3,6 @@ from rapidfuzz import fuzz
 
 from hr_pipeline.utils.logging import get_logger
 
-
 logger = get_logger(__name__)
 
 HRIS_SOURCE_SYSTEMS = ["globaltech_hris", "acquiredco_hris"]
@@ -223,7 +222,6 @@ def build_exact_id_golden_dataset(combined: pd.DataFrame) -> tuple[pd.DataFrame,
     
     return golden, ghost_records, duplicate_hris_records
 
-
 def summarize_payroll_records(enrichment_records: pd.DataFrame) -> pd.DataFrame:
     """
     Reduce payroll enrichment to one row per employee_id.
@@ -302,7 +300,6 @@ def summarize_benefits_records(enrichment_records: pd.DataFrame) -> pd.DataFrame
 
     return benefits_summary
 
-
 def summarize_source_systems(combined: pd.DataFrame) -> pd.DataFrame:
     """
     Build source-system provenance for each employee_id.
@@ -331,7 +328,6 @@ def find_duplicate_employee_ids(golden: pd.DataFrame) -> pd.DataFrame:
     logger.info("Duplicate employee_id records found: %s", len(duplicates))
 
     return duplicates
-
 
 def find_duplicate_emails(golden: pd.DataFrame) -> pd.DataFrame:
     """
@@ -383,7 +379,6 @@ def _build_same_name_match(left, right, hire_date_gap_days: int) -> dict:
         "review_required": True,
     }
 
-
 def _matches_for_same_name_group(
     group: pd.DataFrame,
     max_hire_date_gap_days: int,
@@ -407,7 +402,6 @@ def _matches_for_same_name_group(
                 results.append(_build_same_name_match(left, right, hire_date_gap_days))
 
     return results
-
 
 def find_same_name_cross_company_matches(
     golden: pd.DataFrame,
