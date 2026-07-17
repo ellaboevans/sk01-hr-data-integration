@@ -9,6 +9,13 @@ from hr_pipeline.utils.logging import get_logger
 
 logger = get_logger(__name__)
 
+DEFAULT_CRITICAL_CHECKS = {
+    "employee_id_not_null",
+    "employee_id_unique",
+    "employee_id_format",
+    "company_origin_allowed",
+}
+
 @dataclass
 class ValidationCheck:
     check: str
@@ -22,8 +29,17 @@ class DataQualityValidator:
     Each validation check returns a boolean Series where True means the row
     passed and False means the row failed.
     """
-    def __init__(self, max_failed_checks: int = 2) -> None:
+    def __init__(
+        self,
+        max_failed_checks: int = 2,
+        critical_checks: set[str] | None = None,
+    ) -> None:
         self.max_failed_checks = max_failed_checks
+        self.critical_checks = (
+            DEFAULT_CRITICAL_CHECKS.copy()
+            if critical_checks is None
+            else set(critical_checks)
+        )
         self.checks = self._build_checks()
         
     def _build_checks(self) -> list[ValidationCheck]:
@@ -111,7 +127,7 @@ class DataQualityValidator:
             ),
         ]
     
-    def  run(self, df: pd.DataFrame) -> pd.DataFrame:
+    def run(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Run all validation checks and return a validation report DataFrame.
         """
@@ -159,16 +175,23 @@ class DataQualityValidator:
     
     def assert_quality_gate(self, report: pd.DataFrame)-> None:
         """
-        Raise an error if the number of failed checks exceeds the configured gate.
+        Raise when a critical check fails or too many checks fail overall.
         """
-        failed_checks = int((report["status"] == "FAIL").sum())
+        failed_report = report.loc[report["status"] == "FAIL"]
+        failed_check_names = failed_report["check"].tolist()
+        failed_critical_checks = sorted(
+            set(failed_check_names) & self.critical_checks
+        )
+
+        if failed_critical_checks:
+            raise ValueError(
+                "Data quality gate failed: Critical checks failed: "
+                f"{failed_critical_checks}"
+            )
+
+        failed_checks = len(failed_report)
         
         if failed_checks > self.max_failed_checks:
-            failed_check_names = report.loc[
-                report["status"] == "FAIL",
-                "check"
-            ].tolist()
-            
             raise ValueError(
                 "Data quality gate failed: "
                 f"{failed_checks} checks failed; "
