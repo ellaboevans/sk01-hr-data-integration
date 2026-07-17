@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HR Pipeline Code Review Map</title>
+    <style>
+      :root {
+        --ink: #152019;
+        --muted: #607066;
+        --paper: #f7f5ef;
+        --card: #fffdf8;
+        --line: #d8ddd5;
+        --green: #194f38;
+        --amber: #9a5b11;
+        --red: #9b2d2d;
+        --blue: #245b78;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font:
+          15px/1.55 ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 40px auto 80px;
+      }
+      header {
+        border-bottom: 3px solid var(--ink);
+        padding-bottom: 24px;
+        margin-bottom: 28px;
+      }
+      h1 {
+        font:
+          700 clamp(36px, 6vw, 68px)/0.96 Georgia,
+          serif;
+        letter-spacing: -0.035em;
+        margin: 0 0 14px;
+        max-width: 850px;
+      }
+      h2 {
+        font:
+          700 27px/1.1 Georgia,
+          serif;
+        margin: 46px 0 16px;
+      }
+      h3 {
+        font-size: 16px;
+        margin: 0 0 7px;
+      }
+      p {
+        margin: 7px 0 12px;
+      }
+      code {
+        background: #e9ece5;
+        border-radius: 4px;
+        padding: 1px 5px;
+        font-size: 0.92em;
+      }
+      pre {
+        margin: 12px 0;
+        padding: 14px 16px;
+        overflow: auto;
+        border-radius: 8px;
+        background: var(--ink);
+        color: white;
+      }
+      pre code {
+        padding: 0;
+        background: transparent;
+        color: inherit;
+      }
+      .eyebrow {
+        color: var(--green);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-weight: 800;
+        font-size: 12px;
+      }
+      .lede {
+        font-size: 19px;
+        max-width: 790px;
+        color: #33443a;
+      }
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 7px;
+        margin: 24px 0;
+      }
+      .flow div {
+        padding: 12px 8px;
+        text-align: center;
+        border: 1px solid var(--line);
+        background: var(--card);
+        font-size: 12px;
+        font-weight: 750;
+        position: relative;
+      }
+      .flow div:not(:last-child)::after {
+        content: "→";
+        position: absolute;
+        right: -9px;
+        z-index: 2;
+        color: var(--green);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 17px;
+        break-inside: avoid;
+      }
+      .tag {
+        display: inline-block;
+        border-radius: 999px;
+        padding: 2px 8px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: white;
+        background: var(--green);
+        margin-bottom: 7px;
+      }
+      .review {
+        border-left: 4px solid var(--amber);
+      }
+      .risk {
+        border-left: 4px solid var(--red);
+      }
+      .good {
+        border-left: 4px solid var(--green);
+      }
+      .fact {
+        border-left: 4px solid var(--blue);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--card);
+        font-size: 13px;
+      }
+      th,
+      td {
+        border: 1px solid var(--line);
+        padding: 9px;
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        background: #e9ece5;
+      }
+      ul,
+      ol {
+        padding-left: 20px;
+      }
+      li {
+        margin: 5px 0;
+      }
+      .callout {
+        margin: 18px 0;
+        padding: 16px 18px;
+        background: #e8efe9;
+        border-left: 5px solid var(--green);
+      }
+      .numbers {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+      }
+      .number {
+        background: var(--ink);
+        color: white;
+        padding: 14px;
+      }
+      .number strong {
+        display: block;
+        font:
+          700 26px Georgia,
+          serif;
+      }
+      .number span {
+        color: #cbd7ce;
+        font-size: 11px;
+        text-transform: uppercase;
+      }
+      @media (max-width: 760px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .flow {
+          grid-template-columns: 1fr;
+        }
+        .flow div::after {
+          display: none;
+        }
+        .numbers {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media print {
+        body {
+          background: white;
+          font-size: 11px;
+        }
+        main {
+          width: 100%;
+          margin: 0;
+        }
+        .card,
+        table {
+          background: white;
+        }
+        h2 {
+          break-after: avoid;
+        }
+        .flow div {
+          background: white;
+        }
+        .numbers {
+          grid-template-columns: repeat(5, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="eyebrow">Code-review field guide · SK-01</div>
+        <h1>HR integration pipeline, indexed</h1>
+        <p class="lede">
+          A function-by-function map of what the repository does, why each stage
+          exists, what invariants it relies on, and what a reviewer is likely to
+          challenge.
+        </p>
+      </header>
+
+      <section>
+        <h2>One-sentence mental model</h2>
+        <div class="callout">
+          <strong
+            >The HRIS files create identities; payroll and benefits may only
+            enrich those identities; exact canonical IDs merge automatically;
+            uncertain name matches are exported for human review.</strong
+          >
+        </div>
+        <div class="flow">
+          <div>Ingest</div>
+          <div>Align</div>
+          <div>Clean</div>
+          <div>Consolidate</div>
+          <div>Review candidates</div>
+          <div>Validate</div>
+          <div>Export + chart</div>
+        </div>
+        <div class="numbers">
+          <div class="number">
+            <strong>18,001</strong><span>golden rows</span>
+          </div>
+          <div class="number">
+            <strong>398</strong><span>duplicate HRIS rows</span>
+          </div>
+          <div class="number">
+            <strong>113</strong><span>probable pairs</span>
+          </div>
+          <div class="number">
+            <strong>3,004</strong><span>salary failures</span>
+          </div>
+          <div class="number">
+            <strong>14</strong><span>quality checks</span>
+          </div>
+        </div>
+        <div class="callout">
+          <strong>Current working tree:</strong> nine behavioral tests are
+          passing; raw-source columns are validated; identical HRIS duplicates
+          identify exactly one survivor; critical identity checks stop the gate;
+          and Parquet output is staged and read back before replacement.
+        </div>
+      </section>
+
+      <section>
+        <h2>Source roles and grain</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Raw shape</th>
+              <th>Role</th>
+              <th>What it contributes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>GlobalTech CSV</td>
+              <td>15,000 × 10</td>
+              <td>Identity spine</td>
+              <td>Name, email, organization, job, manager, hire date</td>
+            </tr>
+            <tr>
+              <td>AcquiredCo JSON</td>
+              <td>3,200 records</td>
+              <td>Identity spine</td>
+              <td>
+                Nested identity and assignment attributes; simulated pagination
+              </td>
+            </tr>
+            <tr>
+              <td>Payroll Excel</td>
+              <td>19,000 × 7</td>
+              <td>Enrichment only</td>
+              <td>Salary, currency, frequency, effective date</td>
+            </tr>
+            <tr>
+              <td>Benefits XML</td>
+              <td>12,000 enrollments</td>
+              <td>Enrichment only</td>
+              <td>Enrollment flag and earliest enrollment date</td>
+            </tr>
+            <tr>
+              <td>Department CSV</td>
+              <td>44 × 3</td>
+              <td>Reference</td>
+              <td>Source-specific department → governed department taxonomy</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          <strong>Grain:</strong> raw inputs have different grains; the golden
+          output promises one row per canonical <code>employee_id</code>.
+        </p>
+      </section>
+
+      <section>
+        <h2><code>config.py</code> — pipeline contract and constants</h2>
+        <div class="grid">
+          <article class="card">
+            <span class="tag">Paths</span>
+            <h3><code>PROJECT_ROOT</code> and data directories</h3>
+            <p>
+              Derive all locations from the module file instead of the shell's
+              current directory. This makes module execution reproducible.
+            </p>
+          </article>
+          <article class="card">
+            <span class="tag">Inputs</span>
+            <h3><code>RAW_FILES</code> / <code>REFERENCE_FILES</code></h3>
+            <p>
+              Central registries used by orchestration. Adding a source requires
+              both configuration and dispatch logic in <code>ingest.py</code>.
+            </p>
+          </article>
+          <article class="card">
+            <span class="tag">Rules</span>
+            <h3>Exchange rates and prefixes</h3>
+            <p>
+              Fixed USD rates make output deterministic.
+              <code>COMPANY_PREFIXES</code> and <code>SOURCE_PRIORITY</code> are
+              declared but not used by the current implementation.
+            </p>
+          </article>
+          <article class="card">
+            <span class="tag">Schema</span>
+            <h3><code>STANDARD_EMPLOYEE_COLUMNS</code></h3>
+            <p>
+              The canonical 23-column interchange schema. Alignment functions
+              add missing fields as null and reorder every source consistently.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2><code>ingest.py</code> — load formats, then align schemas</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>Step-by-step behavior</th>
+              <th>Review note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>_handle_missing_file</code></td>
+              <td>Logs an error and returns an empty DataFrame.</td>
+              <td>
+                Empty inputs now align to an empty canonical frame instead of
+                raising <code>KeyError</code>. A source-level completeness gate
+                is still needed to prevent publishing an unexpectedly partial
+                employee population.
+              </td>
+            </tr>
+            <tr>
+              <td><code>_ensure_standard_columns</code></td>
+              <td>
+                Copies input → adds every absent canonical column as
+                <code>pd.NA</code> → returns columns in canonical order.
+              </td>
+              <td>
+                Good boundary between source-specific and shared
+                transformations.
+              </td>
+            </tr>
+            <tr>
+              <td><code>_extract_nested_value</code></td>
+              <td>
+                If a JSON cell is a dict, return its requested key; otherwise
+                return missing.
+              </td>
+              <td>
+                Prevents malformed nested fields from crashing individual
+                extraction.
+              </td>
+            </tr>
+            <tr>
+              <td><code>ingest_globaltech_hris</code></td>
+              <td>
+                Existence check → UTF-8 <code>read_csv</code> → attach
+                provenance → log count.
+              </td>
+              <td>
+                Broad exception handling converts all failures to an empty
+                frame, potentially masking a failed critical identity source.
+              </td>
+            </tr>
+            <tr>
+              <td><code>ingest_acquiredco_hris</code></td>
+              <td>
+                Load JSON → accept dict/list → pull <code>employees</code> →
+                slice into 500-record pages → concatenate pages → tag source.
+              </td>
+              <td>
+                Pagination is simulated in memory, not API pagination;
+                <code>page_size &lt;= 0</code> is not guarded.
+              </td>
+            </tr>
+            <tr>
+              <td><code>ingest_payroll</code></td>
+              <td>
+                Read Excel with pandas → attach <code>payroll</code> provenance.
+              </td>
+              <td>
+                Required payroll columns are checked by
+                <code>align_all_sources</code> before this adapter runs.
+              </td>
+            </tr>
+            <tr>
+              <td><code>ingest_benefits</code></td>
+              <td>
+                Parse XML → find every <code>enrollment</code> node → turn its
+                direct children into a dict → DataFrame.
+              </td>
+              <td>
+                Simple and clear; assumes flat children and ignores repeated
+                child tags/attributes.
+              </td>
+            </tr>
+            <tr>
+              <td><code>ingest_all_sources</code></td>
+              <td>
+                Iterate configured sources → string-based dispatch → collect
+                frames → log row/column summaries.
+              </td>
+              <td>
+                A registry of callables would scale better than an
+                <code>if/elif</code> chain.
+              </td>
+            </tr>
+            <tr>
+              <td><code>align_*_schema</code></td>
+              <td>
+                Create a fresh frame → rename/derive source fields → hardcode
+                company/source metadata → enforce canonical columns.
+              </td>
+              <td>
+                Benefits are always labeled GlobalTech. Confirm that the XML
+                cannot contain AcquiredCo employees.
+              </td>
+            </tr>
+            <tr>
+              <td><code>align_all_sources</code></td>
+              <td>
+                Convert empty inputs to canonical empty frames → validate
+                required raw columns → dispatch each nonempty frame to its
+                alignment adapter → log dimensions.
+              </td>
+              <td>
+                Missing columns now raise source-specific
+                <code>ValueError</code>
+                messages. Nested JSON shapes and source data types remain
+                follow-up contract checks.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>
+          <code>clean.py</code> — normalize values and business taxonomies
+        </h2>
+        <div class="grid">
+          <article class="card">
+            <h3><code>normalize_name</code></h3>
+            <p>
+              Null guard → Unicode NFKC normalization → trim → title case. This
+              reduces superficial formatting differences.
+            </p>
+            <p class="review">
+              <strong>Challenge:</strong> title casing can alter valid names
+              such as “McDONALD” or “van der Waals.”
+            </p>
+          </article>
+          <article class="card">
+            <h3><code>normalize_employee_id</code></h3>
+            <p>
+              Select <code>GT</code>/<code>AC</code> namespace → parse numeric
+              IDs or first digit run → format six digits. It prevents
+              cross-company ID collisions.
+            </p>
+            <p class="review">
+              <strong>Challenge:</strong> it accepts zero and silently discards
+              nonnumeric ID structure.
+            </p>
+          </article>
+          <article class="card">
+            <h3><code>normalize_manager_id</code></h3>
+            <p>
+              Reuse employee-ID normalization so foreign keys use the same
+              canonical format.
+            </p>
+          </article>
+          <article class="card">
+            <h3><code>normalize_employment_type</code></h3>
+            <p>
+              Map known spelling/abbreviation variants into three allowed
+              categories; unknown values become null and are logged.
+            </p>
+          </article>
+          <article class="card">
+            <h3><code>standardize_date</code></h3>
+            <p>
+              Parse in UTC → remove timezone → reject before 1970 or after
+              today.
+            </p>
+            <p class="review">
+              <strong>Challenge:</strong> cleaning accepts dates from 1970,
+              while golden-dataset validation later requires 1990 or newer.
+            </p>
+          </article>
+          <article class="card">
+            <h3><code>parse_salary</code></h3>
+            <p>
+              Remove common currency symbols and commas, then cast to float.
+              Missing/unparsable values stay missing.
+            </p>
+          </article>
+          <article class="card">
+            <h3><code>normalize_salary_to_usd_annual</code></h3>
+            <p>
+              Parse amount → fixed currency conversion → multiply by
+              annual/monthly/biweekly factor → round.
+            </p>
+            <p class="risk">
+              <strong>High-risk assumption:</strong> frequency tells how often
+              the provided amount is paid. Existing 3,004 failures suggest some
+              “Bi-Weekly” values may already be annual salary.
+            </p>
+          </article>
+          <article class="card">
+            <h3><code>clean_standardized_dataframe</code></h3>
+            <p>
+              Copies the aligned frame → normalizes
+              names/email/IDs/types/dates/salary → applies department reference
+              mapping.
+            </p>
+            <p class="review">
+              <strong>Fallback:</strong> derives <code>full_name</code> from
+              first/last when available and preserves the normalized
+              source-provided full name when both components are missing.
+            </p>
+          </article>
+          <article class="card">
+            <h3><code>load_department_mapping</code></h3>
+            <p>
+              Load CSV → require three columns → return an empty correctly
+              shaped mapping only when file is missing.
+            </p>
+            <p class="review">
+              <strong>Challenge:</strong> other read/parser errors propagate;
+              decide whether that fail-fast behavior is intentional.
+            </p>
+          </article>
+          <article class="card">
+            <h3><code>map_departments</code></h3>
+            <p>
+              Build case-insensitive lookup keyed by
+              <code>(source_system, source_department)</code> → map row-by-row →
+              collect and log unique misses.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>
+          <code>dedup.py</code> — identity spine, enrichment, and candidate
+          matching
+        </h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Function</th>
+              <th>What it guarantees</th>
+              <th>Important detail</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>combine_cleaned_sources</code></td>
+              <td>One long canonical table.</td>
+              <td>
+                <code>concat</code> preserves all source rows; it does not match
+                anyone yet.
+              </td>
+            </tr>
+            <tr>
+              <td><code>build_source_systems</code></td>
+              <td>Stable, sorted, pipe-delimited provenance.</td>
+              <td>Example: <code>benefits|globaltech_hris|payroll</code>.</td>
+            </tr>
+            <tr>
+              <td><code>deduplicate_hris_identity_records</code></td>
+              <td>
+                One HRIS survivor per canonical ID plus a full duplicate review
+                table.
+              </td>
+              <td>
+                Ranks by non-null identity count, source name, and stable source
+                row order. A unique internal row marker ensures exactly one
+                duplicate is marked <code>kept_in_golden=True</code>, even when
+                two source rows are otherwise identical.
+              </td>
+            </tr>
+            <tr>
+              <td><code>summarize_payroll_records</code></td>
+              <td>At most one payroll record per employee.</td>
+              <td>
+                Latest effective date wins; ties depend on stable input order
+                and are not explicitly resolved.
+              </td>
+            </tr>
+            <tr>
+              <td><code>summarize_benefits_records</code></td>
+              <td>At most one benefits summary per employee.</td>
+              <td>Any record means enrolled; earliest enrollment date wins.</td>
+            </tr>
+            <tr>
+              <td><code>summarize_source_systems</code></td>
+              <td>One provenance summary per employee ID.</td>
+              <td>
+                Uses all combined records, including unmatched enrichment; only
+                matched IDs reach golden.
+              </td>
+            </tr>
+            <tr>
+              <td><code>build_exact_id_golden_dataset</code></td>
+              <td>
+                HRIS-only identity spine, exact-ID enrichment, ghost isolation,
+                and unique golden ID.
+              </td>
+              <td>
+                Drops enrichment placeholders from HRIS → deduplicates HRIS →
+                splits matched/ghost enrichment → summarizes → left-joins →
+                defaults benefits false → asserts uniqueness.
+              </td>
+            </tr>
+            <tr>
+              <td><code>find_duplicate_employee_ids</code></td>
+              <td>Postcondition check that golden IDs are unique.</td>
+              <td>
+                Expected output is empty because the builder already raises on
+                duplicates.
+              </td>
+            </tr>
+            <tr>
+              <td><code>find_duplicate_emails</code></td>
+              <td>Only duplicate emails spanning both companies.</td>
+              <td>Same-company reuse is intentionally ignored.</td>
+            </tr>
+            <tr>
+              <td><code>find_same_name_cross_company_matches</code></td>
+              <td>
+                Review pairs with identical normalized full name and hire dates
+                ≤30 days apart.
+              </td>
+              <td>No merge occurs; it emits evidence for HR.</td>
+            </tr>
+            <tr>
+              <td><code>find_fuzzy_name_hire_date_matches</code></td>
+              <td>
+                Review pairs scoring ≥88 using word-order-insensitive name
+                similarity within the 30-day date block.
+              </td>
+              <td>
+                Date blocking avoids a full 3,001 × 15,000 comparison, but
+                <code>iterrows</code> is still slow at scale.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout">
+          <strong>Why exact first, fuzzy second?</strong> Exact namespaced IDs
+          are deterministic enough to automate. Names are ambiguous, so fuzzy
+          scores supply candidates—not truth. The pipeline deliberately
+          separates integration from entity-resolution review.
+        </div>
+      </section>
+
+      <section>
+        <h2>
+          <code>validate.py</code> — declarative checks and a dataset-level gate
+        </h2>
+        <p>
+          <code>ValidationCheck</code> stores a name, description, and function
+          that returns one boolean per row.
+          <code>DataQualityValidator._build_checks</code> defines 14 checks for
+          keys, formats, required values, allowed categories, ranges, foreign
+          keys, and booleans.
+        </p>
+        <div class="grid">
+          <article class="card">
+            <h3><code>run</code></h3>
+            <p>
+              Execute each mask → treat null mask results as failure → count
+              passed/failed → calculate rate → mark a check PASS only when zero
+              rows fail.
+            </p>
+          </article>
+          <article class="card">
+            <h3><code>assert_quality_gate</code></h3>
+            <p>
+              Fail immediately when a critical employee-ID or company-origin
+              check fails. Otherwise count failed <em>check types</em> and raise
+              when more than two noncritical checks fail.
+            </p>
+          </article>
+          <article class="card">
+            <h3><code>get_failed_records</code></h3>
+            <p>
+              Rerun one named validation and return the failing rows with
+              diagnostic columns.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Private validators</h3>
+            <p>
+              Hire date: 1990 through today. Salary: null or $20k–$2m. Manager:
+              null or present in golden employee IDs.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Export methods</h3>
+            <p>
+              Write the summary as CSV/HTML and failed rows as CSV, creating
+              directories as needed.
+            </p>
+          </article>
+          <article class="card risk">
+            <h3>Gate semantics</h3>
+            <p>
+              Critical identity checks now fail immediately, but one noncritical
+              check can still fail 3,004 rows and pass because only one check
+              type failed. Ask whether risk tolerance should also cap row
+              failure rates.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2><code>visualize.py</code> — reporting layer</h2>
+        <p>
+          <code>_add_source_note</code> stamps provenance/time;
+          <code>_save_chart</code> creates directories, tightens layout, saves
+          at 300 DPI, closes the figure, and logs. Six plot functions compute an
+          aggregate then render department headcount, country headcount, salary
+          box plots, tenure histogram, department benefits rate, and validation
+          pass/fail bars. <code>generate_all_charts</code> is the façade that
+          invokes all six.
+        </p>
+        <p class="review">
+          <strong>Review points:</strong> tenure uses the runtime date, so
+          charts are not reproducible across days; boolean casting can turn some
+          nonempty strings into <code>True</code>; empty salary/grouping inputs
+          need explicit behavior tests.
+        </p>
+      </section>
+
+      <section>
+        <h2><code>pipeline.py</code> — orchestration and publishing</h2>
+        <ol>
+          <li>
+            <code>prepare_for_parquet_export</code> coerces known columns to
+            stable string, datetime, numeric, and boolean dtypes.
+          </li>
+          <li>
+            <code>build_probable_matches_export</code> translates internal
+            left/right fields to HR-facing names; exact-name pairs receive
+            similarity 100; action is <code>HR_REVIEW</code>.
+          </li>
+          <li>
+            <code>main</code> calls every stage in business order and prints
+            summaries.
+          </li>
+          <li>
+            Same-name and fuzzy candidates are concatenated; exact-name
+            candidates win when the same pair is found twice.
+          </li>
+          <li>
+            The 14 validations run, then the quality gate may stop publishing.
+          </li>
+          <li>
+            A new Parquet dataset is written to a staging directory and then
+            read back to verify its row count. Only then is it moved into place,
+            with the previous dataset retained as a temporary rollback backup
+            during publication.
+          </li>
+          <li>Review CSVs, validation outputs, and charts are produced.</li>
+        </ol>
+        <p class="risk">
+          <strong>Remaining production consideration:</strong> staged writing
+          prevents a failed Parquet write from destroying the previous output,
+          and restoration is attempted if the swap fails. A versioned dataset
+          plus an atomic metadata/pointer switch would provide stronger
+          concurrent-reader guarantees in production.
+        </p>
+      </section>
+
+      <section>
+        <h2>Strong review observations</h2>
+        <div class="grid">
+          <article class="card good">
+            <h3>Good: explicit source authority</h3>
+            <p>
+              The code prevents payroll-only or benefits-only records from
+              silently becoming trusted employees.
+            </p>
+          </article>
+          <article class="card good">
+            <h3>Good: uncertainty stays visible</h3>
+            <p>
+              Fuzzy matches, ghosts, duplicates, and salary outliers are
+              preserved as review artifacts rather than hidden.
+            </p>
+          </article>
+          <article class="card review">
+            <h3>Test coverage is foundational</h3>
+            <p>
+              The new suite covers core integration, empty/schema-drift inputs,
+              duplicate survivor auditing, critical gates, match exports, and
+              staged publishing. More normalization and visualization edge cases
+              remain useful follow-up work.
+            </p>
+          </article>
+          <article class="card risk">
+            <h3>Risk: source schema drift</h3>
+            <p>
+              Required raw columns are now validated with source-specific
+              errors. Nested JSON shapes and source data types still need deeper
+              contract validation.
+            </p>
+          </article>
+          <article class="card risk">
+            <h3>Risk: PII in version control</h3>
+            <p>
+              Raw HR files, golden Parquet, exception CSVs, charts, and pipeline
+              log are tracked by Git. If data is not explicitly synthetic, this
+              is a serious privacy/governance issue.
+            </p>
+          </article>
+          <article class="card review">
+            <h3>Decision needed: zero-valued IDs</h3>
+            <p>
+              The discarded filter has been removed, but the canonical format
+              still permits <code>AC-000000</code>. Confirm whether zero is a
+              valid source identifier before rejecting it or adding a dedicated
+              validation rule.
+            </p>
+          </article>
+          <article class="card review">
+            <h3>Documentation maintenance</h3>
+            <p>
+              Keep source filenames, validation-gate semantics, and publication
+              behavior synchronized with the implementation. The schema table
+              still contains unescaped pipes that should be cleaned up.
+            </p>
+          </article>
+          <article class="card review">
+            <h3>Maintainability</h3>
+            <p>
+              <code>COMPANY_PREFIXES</code> is now the source of truth for ID
+              namespaces. <code>SOURCE_PRIORITY</code> remains unused and should
+              either drive survivor ordering or be removed.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <h2>Verification command</h2>
+        <p>Run from the repository root with the project interpreter:</p>
+        <pre><code>PYTHONPATH=src .venv/bin/python -m unittest discover -s tests -v</code></pre>
+        <p>
+          The suite currently contains nine tests covering cleaning fallbacks,
+          source schema handling, exact-ID integration, ghost isolation,
+          duplicate audit accuracy, critical quality gates, match export edge
+          cases, and staged Parquet publication. If <code>tests</code> is
+          reported as “not importable,” confirm that the shell is at the
+          repository root.
+        </p>
+      </section>
+
+      <section>
+        <h2>Questions a reviewer may ask—and compact answers</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Question</th>
+              <th>Answer you can give</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Why not concatenate all sources and drop duplicates?</td>
+              <td>
+                Because source rows have different authority and grain. HRIS
+                establishes identity; enrichment sources can contain multiple
+                payroll or enrollment events and must be summarized first.
+              </td>
+            </tr>
+            <tr>
+              <td>Why namespace IDs?</td>
+              <td>
+                Source IDs are only unique inside their company. Prefixing
+                avoids a GlobalTech “1” colliding with an AcquiredCo “1.”
+              </td>
+            </tr>
+            <tr>
+              <td>Why not merge score-100 name matches?</td>
+              <td>
+                Names are not identifiers. Two people can share a name and
+                similar hire date, so the cost of a false merge justifies human
+                review.
+              </td>
+            </tr>
+            <tr>
+              <td>Why left joins?</td>
+              <td>
+                The identity spine must retain every trusted HRIS employee even
+                when payroll or benefits enrichment is missing.
+              </td>
+            </tr>
+            <tr>
+              <td>Why Parquet and partitioning?</td>
+              <td>
+                Parquet preserves typed columnar data and supports selective
+                reads; company partitioning can prune reads for company-scoped
+                analysis.
+              </td>
+            </tr>
+            <tr>
+              <td>What would you productionize first?</td>
+              <td>
+                Tests and schema contracts; secure/untrack HR data; configurable
+                governed reference tables; failure-rate gates; versioned
+                publishing; orchestration and observability.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <footer>
+        <p>
+          Use this as the fast lookup companion to
+          <a href="../lessons/0001-trace-the-hr-pipeline.html">Lesson 0001</a>.
+          Official background:
+          <a href="https://pandas.pydata.org/docs/user_guide/index.html"
+            >pandas</a
+          >,
+          <a href="https://rapidfuzz.github.io/RapidFuzz/Usage/fuzz.html"
+            >RapidFuzz</a
+          >,
+          <a href="https://docs.python.org/3/library/xml.etree.elementtree.html"
+            >ElementTree</a
+          >, and
+          <a href="https://arrow.apache.org/docs/python/parquet.html"
+            >Apache Arrow Parquet</a
+          >.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

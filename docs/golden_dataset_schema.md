@@ -153,7 +153,8 @@ Current validation checks include:
 | `manager_id_referential_integrity` | Manager ID must refer to an existing employee when present.       |
 | `benefits_enrolled_boolean`        | Benefits enrollment flag must be boolean.                         |
 
-The quality gate fails if more than two validation checks fail.
+Employee ID and company-origin checks are critical and always fail the quality
+gate. For noncritical checks, the gate fails if more than two check types fail.
 
 ## Related Review Files
 

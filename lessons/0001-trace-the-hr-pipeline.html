@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lesson 0001 — Trace an Employee Through the Pipeline</title>
+    <style>
+      :root {
+        --navy: #102a35;
+        --cream: #fbf7ec;
+        --white: #fffefa;
+        --teal: #16736a;
+        --orange: #e66b3d;
+        --line: #d9d8cc;
+        --muted: #647078;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--cream);
+        color: var(--navy);
+        font:
+          16px/1.65 ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+      }
+      main {
+        width: min(900px, calc(100% - 30px));
+        margin: 0 auto 90px;
+      }
+      header {
+        padding: 72px 0 42px;
+        border-bottom: 1px solid var(--line);
+      }
+      .kicker {
+        font-size: 12px;
+        font-weight: 850;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--teal);
+      }
+      h1 {
+        font:
+          750 clamp(42px, 7vw, 76px)/0.95 Georgia,
+          serif;
+        letter-spacing: -0.04em;
+        margin: 12px 0 20px;
+        max-width: 800px;
+      }
+      h2 {
+        font:
+          700 31px/1.15 Georgia,
+          serif;
+        margin: 54px 0 14px;
+      }
+      h3 {
+        margin: 0 0 6px;
+        font-size: 17px;
+      }
+      .lede {
+        font-size: 20px;
+        max-width: 720px;
+        color: #36515a;
+      }
+      .time {
+        display: inline-block;
+        background: var(--navy);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 99px;
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .stage {
+        display: grid;
+        grid-template-columns: 64px 1fr;
+        gap: 15px;
+        margin: 16px 0;
+        padding: 18px;
+        background: var(--white);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+      }
+      .n {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: var(--teal);
+        color: white;
+        font:
+          700 20px Georgia,
+          serif;
+      }
+      code {
+        background: #e8ede7;
+        border-radius: 4px;
+        padding: 1px 5px;
+        font-size: 0.91em;
+      }
+      .sample {
+        margin: 10px 0;
+        background: var(--navy);
+        color: #eaf5ef;
+        padding: 14px 16px;
+        border-radius: 8px;
+        overflow: auto;
+        font:
+          13px/1.6 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        white-space: pre-wrap;
+      }
+      .why {
+        border-left: 4px solid var(--orange);
+        padding: 12px 16px;
+        background: #fff1e9;
+        margin: 12px 0;
+      }
+      .checkpoint {
+        padding: 20px;
+        background: #e6f1ee;
+        border: 1px solid #bad6ce;
+        border-radius: 12px;
+        margin: 24px 0;
+      }
+      .checkpoint summary {
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .answer {
+        margin-top: 12px;
+        border-top: 1px solid #bad6ce;
+        padding-top: 12px;
+      }
+      .compare {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .box {
+        background: var(--white);
+        border: 1px solid var(--line);
+        padding: 16px;
+        border-radius: 10px;
+      }
+      .box strong {
+        display: block;
+        color: var(--teal);
+      }
+      .map {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        align-items: center;
+        margin: 20px 0;
+      }
+      .map span {
+        padding: 8px 11px;
+        border: 1px solid var(--line);
+        background: var(--white);
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .arrow {
+        border: 0 !important;
+        background: transparent !important;
+        color: var(--orange);
+      }
+      .final {
+        background: var(--navy);
+        color: white;
+        padding: 24px;
+        border-radius: 14px;
+        margin-top: 44px;
+      }
+      .final h2 {
+        margin-top: 0;
+        color: white;
+      }
+      .final a {
+        color: #8ee1d1;
+      }
+      a {
+        color: #0c665d;
+      }
+      .small {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      ul {
+        padding-left: 22px;
+      }
+      @media (max-width: 640px) {
+        .stage {
+          grid-template-columns: 1fr;
+        }
+        .compare {
+          grid-template-columns: 1fr;
+        }
+        header {
+          padding-top: 42px;
+        }
+      }
+      @media print {
+        body {
+          background: white;
+          font-size: 12px;
+        }
+        main {
+          width: 100%;
+          margin: 0;
+        }
+        .stage,
+        .box {
+          background: white;
+        }
+        .checkpoint {
+          display: none;
+        }
+        header {
+          padding-top: 0;
+        }
+        h2 {
+          break-after: avoid;
+        }
+        .stage {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="kicker">Lesson 0001 · Code review readiness</div>
+        <h1>Trace one employee from raw file to golden row</h1>
+        <p class="lede">
+          If you can narrate one record's journey, you understand the
+          repository's architecture. This lesson builds that narrative in seven
+          stages.
+        </p>
+        <span class="time">15–20 minutes</span>
+      </header>
+
+      <section>
+        <h2>Before the code: identify the grain</h2>
+        <p>
+          The pipeline does not start with four equivalent employee tables. It
+          starts with two identity sources and two event/enrichment sources.
+        </p>
+        <div class="compare">
+          <div class="box">
+            <strong>Identity sources</strong>GlobalTech HRIS and AcquiredCo HRIS
+            are allowed to create golden employees.
+          </div>
+          <div class="box">
+            <strong>Enrichment sources</strong>Payroll and benefits can add
+            facts to an existing identity, but cannot create one.
+          </div>
+        </div>
+        <div class="why">
+          <strong>Why this matters:</strong> a payroll record without an HRIS
+          match may be a stale ID, integration error, or “ghost employee.”
+          Treating it as a real identity would hide the anomaly.
+        </div>
+      </section>
+
+      <section>
+        <h2>The complete route</h2>
+        <div class="map">
+          <span>Raw files</span><span class="arrow">→</span><span>Ingest</span
+          ><span class="arrow">→</span><span>Align</span
+          ><span class="arrow">→</span><span>Clean</span
+          ><span class="arrow">→</span><span>Exact-ID golden</span
+          ><span class="arrow">→</span><span>Review candidates</span
+          ><span class="arrow">→</span><span>Validate</span
+          ><span class="arrow">→</span><span>Publish</span>
+        </div>
+
+        <article class="stage">
+          <div class="n">1</div>
+          <div>
+            <h3>Ingest: deserialize the source format</h3>
+            <p>
+              <code>ingest_all_sources()</code> walks <code>RAW_FILES</code>. A
+              source-specific function turns CSV, JSON, Excel, or XML into a
+              pandas DataFrame and attaches <code>source_system</code>.
+            </p>
+            <div class="sample">
+              Raw payroll example employee_id=3, source=AcquiredCo,
+              base_salary=98952, currency=USD, pay_frequency=Bi-Weekly
+            </div>
+            <p>
+              No cross-source matching happens here. The goal is simply “bytes
+              on disk → rows in memory + provenance.”
+            </p>
+          </div>
+        </article>
+
+        <article class="stage">
+          <div class="n">2</div>
+          <div>
+            <h3>Align: translate source dialects into one schema</h3>
+            <p>
+              Each <code>align_*_schema()</code> function maps raw source fields
+              into <code>STANDARD_EMPLOYEE_COLUMNS</code>. Missing concepts are
+              explicitly filled with <code>pd.NA</code>.
+            </p>
+            <div class="sample">
+              Payroll aligned row employee_id=3 | company_origin=AcquiredCo
+              salary_original=98952 | currency=USD | pay_frequency=Bi-Weekly
+              first_name=&lt;NA&gt; | email=&lt;NA&gt; | source_system=payroll
+            </div>
+            <p>
+              This is an adapter layer. Once aligned, cleaning and deduplication
+              do not need to know whether a record came from Excel or JSON.
+            </p>
+            <p>
+              Before a nonempty adapter runs, <code>align_all_sources()</code>
+              checks its required raw columns. Missing columns now produce a
+              source-specific <code>ValueError</code>; truly empty sources become
+              empty canonical frames rather than crashing with
+              <code>KeyError</code>.
+            </p>
+          </div>
+        </article>
+
+        <article class="stage">
+          <div class="n">3</div>
+          <div>
+            <h3>Clean: make keys and values comparable</h3>
+            <p>
+              <code>clean_standardized_dataframe()</code> normalizes names,
+              email, IDs, manager IDs, employment type, dates, salary, and
+              departments.
+            </p>
+            <div class="sample">
+              ID normalization 3 + AcquiredCo → AC-000003 Salary normalization
+              currently assumes 98952 × 1.00 USD rate × 26 biweekly periods =
+              2,572,752 USD/year
+            </div>
+            <p>
+              The ID result is intentional namespacing. The salary result is
+              retained but later flagged because it exceeds $2 million—a useful
+              example of why validation is separate from cleaning.
+            </p>
+          </div>
+        </article>
+
+        <details class="checkpoint">
+          <summary>
+            Checkpoint 1 — Why not “fix” the salary in cleaning?
+          </summary>
+          <div class="answer">
+            Because the code does not have enough evidence to know whether the
+            source amount or frequency label is wrong. Silently changing it
+            would invent data. The safer current policy is to retain the
+            transformed value, fail its business-range check, and send the
+            source record for review.
+          </div>
+        </details>
+
+        <article class="stage">
+          <div class="n">4</div>
+          <div>
+            <h3>Consolidate: build the identity spine, then enrich it</h3>
+            <p>
+              <code>build_exact_id_golden_dataset()</code> separates HRIS
+              records from enrichment records. It deduplicates HRIS identities,
+              finds enrichment IDs that have no HRIS identity, summarizes
+              repeated payroll/benefit facts, and left-joins summaries onto
+              HRIS.
+            </p>
+            <ol>
+              <li>
+                HRIS duplicate survivor: most populated identity row wins;
+                source row order is the final deterministic tie-breaker.
+              </li>
+              <li>
+                Payroll survivor: latest compensation effective date wins.
+              </li>
+              <li>
+                Benefits summary: any enrollment means <code>True</code>;
+                earliest date wins.
+              </li>
+              <li>
+                Unmatched enrichment: exported as a ghost record, not a golden
+                employee.
+              </li>
+            </ol>
+            <div class="sample">
+              Golden AC-000003 now combines AcquiredCo HRIS identity + latest
+              payroll compensation source_systems=acquiredco_hris|payroll
+              dedup_method=exact_employee_id
+            </div>
+          </div>
+        </article>
+
+        <article class="stage">
+          <div class="n">5</div>
+          <div>
+            <h3>
+              Generate review candidates: detect possible cross-company identity
+              overlap
+            </h3>
+            <p>
+              Exact canonical IDs cannot join a pre-merger AcquiredCo identity
+              to a GlobalTech identity because their namespaces deliberately
+              differ. The pipeline therefore creates—not applies—two types of
+              candidate link:
+            </p>
+            <ul>
+              <li>Same normalized full name and hire dates within 30 days.</li>
+              <li>
+                RapidFuzz <code>token_sort_ratio ≥ 88</code> and hire dates
+                within 30 days.
+              </li>
+            </ul>
+            <div class="sample">
+              Current review example AC-000038 Gary Phillips GT-008001 Larry
+              Phillips score=88.888889 | hire-date gap=10 days |
+              action=HR_REVIEW
+            </div>
+            <p>
+              The date window is a blocking rule: only plausible date neighbors
+              get the more expensive name comparison. The score is evidence, not
+              an employee key.
+            </p>
+          </div>
+        </article>
+
+        <details class="checkpoint">
+          <summary>
+            Checkpoint 2 — Why is a similarity score of 100 still review-only?
+          </summary>
+          <div class="answer">
+            Because two real people can have exactly the same name and similar
+            hire dates. A name score estimates string similarity, not identity
+            truth. Email, date of birth, legal identifiers, or human
+            confirmation would be needed for a safer merge decision.
+          </div>
+        </details>
+
+        <article class="stage">
+          <div class="n">6</div>
+          <div>
+            <h3>Validate: measure contract compliance</h3>
+            <p>
+              <code>DataQualityValidator</code> runs 14 row-level masks. For
+              every check it reports total, passed, failed, pass rate, and
+              PASS/FAIL. Current output has one failed check type: 3,004 rows
+              fail the annual salary range.
+            </p>
+            <div class="sample">
+              Gate semantics failed check types = 1 maximum allowed failed check
+              types = 2 result: pipeline gate passes
+            </div>
+            <p>
+              This is subtle: employee-ID and company-origin checks are now
+              critical, but the remaining gate still counts categories of
+              failure rather than bad rows. A reviewer should ask whether
+              failure-rate thresholds are also needed.
+            </p>
+          </div>
+        </article>
+
+        <article class="stage">
+          <div class="n">7</div>
+          <div>
+            <h3>Publish: stabilize types and write consumer artifacts</h3>
+            <p>
+              <code>prepare_for_parquet_export()</code> coerces columns to
+              predictable dtypes. <code>write_golden_dataset()</code> writes a
+              staged Parquet dataset partitioned by
+              <code>company_origin</code>, reads it back to verify the expected
+              row count, and only then swaps it into place while retaining a
+              temporary rollback backup. Exceptions go to CSV, validation also
+              goes to HTML, and six charts go to PNG.
+            </p>
+            <p>
+              Partitioning produces company directories and allows
+              company-filtered readers to skip irrelevant files. Parquet is
+              columnar and typed, which is a better analytics contract than CSV.
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <section>
+        <h2>The invariants to say aloud in review</h2>
+        <ul>
+          <li>
+            <strong>Identity authority:</strong> only HRIS rows create golden
+            employees.
+          </li>
+          <li>
+            <strong>Golden grain:</strong> exactly one row per canonical
+            employee ID.
+          </li>
+          <li>
+            <strong>Key safety:</strong> company prefixes prevent cross-company
+            numeric collisions.
+          </li>
+          <li>
+            <strong>Join safety:</strong> enrichment is summarized to one row
+            per employee before joins.
+          </li>
+          <li>
+            <strong>Uncertainty policy:</strong> fuzzy identity evidence never
+            mutates the golden dataset automatically.
+          </li>
+          <li>
+            <strong>Auditability:</strong> duplicate, ghost, probable-match, and
+            failed-validation rows remain inspectable.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Verify the behavior yourself</h2>
+        <p>From the repository root, run:</p>
+        <div class="sample">
+          PYTHONPATH=src .venv/bin/python -m unittest discover -s tests -v
+        </div>
+        <p>
+          The nine tests exercise public behavior across cleaning, alignment,
+          exact-ID integration, ghost isolation, duplicate review accuracy,
+          critical validation gates, match exports, and staged publication. If
+          unittest says <code>tests</code> is not importable, first check that
+          your terminal is in the repository root and that you are using the
+          project virtual environment.
+        </p>
+        <details class="checkpoint">
+          <summary>Checkpoint — Why do we run with <code>PYTHONPATH=src</code>?</summary>
+          <div class="answer">
+            Because the importable <code>hr_pipeline</code> package lives under
+            the repository's <code>src/</code> directory. The environment value
+            adds that directory to Python's module search path for the test run.
+          </div>
+        </details>
+      </section>
+
+      <section>
+        <h2>Final rehearsal</h2>
+        <details class="checkpoint">
+          <summary>
+            Scenario — A benefits record has employee ID GT-999999, but no HRIS
+            record has that ID. Where does it go, and why?
+          </summary>
+          <div class="answer">
+            It becomes a ghost enrichment record. It cannot enter golden because
+            benefits is not an identity source, and the left-side identity spine
+            contains only deduplicated HRIS employees.
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            Scenario — Two AcquiredCo HRIS rows normalize to AC-000123. Which
+            one survives?
+          </summary>
+          <div class="answer">
+            The row with more populated identity fields survives. If
+            completeness and source system tie, stable source row order is the
+            final tie-breaker. Both rows remain in the duplicate review output,
+            but the internal row marker guarantees exactly one is marked
+            <code>kept_in_golden=True</code>.
+          </div>
+        </details>
+        <details class="checkpoint">
+          <summary>
+            Scenario — Three noncritical quality check types fail, but only one
+            row fails each. Does publishing continue?
+          </summary>
+          <div class="answer">
+            No. <code>assert_quality_gate</code> raises when failed check types
+            exceed two. Conversely, one check type may fail thousands of rows
+            and still remain below the current gate.
+          </div>
+        </details>
+      </section>
+
+      <section class="final">
+        <h2>Your 45-second review explanation</h2>
+        <p>
+          “This is a local batch pipeline that integrates two HRIS identity
+          systems with payroll and benefits enrichment. Each raw format is
+          ingested and adapted into a canonical schema, then common cleaning
+          rules namespace IDs and standardize business fields. The golden
+          identity spine is built only from HRIS, deduplicated
+          deterministically, and enriched through exact IDs after payroll and
+          benefits are reduced to one row per employee. Unmatched enrichment
+          becomes ghost review data. Same-name and fuzzy matches are exported
+          for HR review and never auto-merged. Fourteen checks validate the
+          final grain and business rules, with critical identity checks failing
+          immediately. A typed, company-partitioned Parquet dataset is staged,
+          read back, and safely swapped into place before exception reports are
+          published.”
+        </p>
+        <p>
+          Next: open the
+          <a href="../reference/hr-pipeline-code-review-map.html"
+            >function-by-function review map</a
+          >. Ask your agent about anything that remains unclear; your next
+          session can be a mock code review with scenario questions.
+        </p>
+      </section>
+
+      <p class="small">
+        Sources: repository implementation and generated reports;
+        <a href="https://pandas.pydata.org/docs/user_guide/index.html"
+          >pandas user guide</a
+        >;
+        <a href="https://rapidfuzz.github.io/RapidFuzz/Usage/fuzz.html"
+          >RapidFuzz</a
+        >;
+        <a href="https://docs.python.org/3/library/xml.etree.elementtree.html"
+          >ElementTree</a
+        >;
+        <a href="https://arrow.apache.org/docs/python/parquet.html"
+          >Apache Arrow Parquet</a
+        >.
+      </p>
+    </main>
+  </body>
+</html>
