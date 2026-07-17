@@ -44,7 +44,7 @@ Expected source columns:
 
 ### 2.2 AcquiredCo HRIS
 
-**Path:** `data/raw/acquiredco_hris.json`
+**Path:** `data/raw/acquiredco_api.json`
 **Format:** JSON
 **System role:** Primary HRIS identity source for AcquiredCo employees
 
@@ -201,9 +201,12 @@ The pipeline does not silently correct suspicious compensation values. Instead, 
 
 ### 4.5 Validation Gate
 
-The validation layer runs 14 data-quality checks. The pipeline gate fails only if more than 2 checks fail.
+The validation layer runs 14 data-quality checks. Employee ID and company-origin
+checks are critical and always fail the gate. For noncritical checks, the gate
+fails if more than 2 check types fail.
 
-This allows the pipeline to produce outputs when minor data-quality issues exist, while still making those issues visible through validation reports.
+This allows the pipeline to produce outputs when minor data-quality issues exist,
+while preventing publication when a critical identity rule fails.
 
 ## 5. Output Files
 
@@ -335,6 +338,14 @@ The pipeline will:
 6. Run validation checks.
 7. Export reports and processed data.
 8. Generate visualization PNGs.
+
+### 6.4 Run the Tests
+
+From the repository root:
+
+```bash
+PYTHONPATH=src python3 -m unittest discover -s tests -v
+```
 
 ## 7. Known Limitations and Assumptions
 
