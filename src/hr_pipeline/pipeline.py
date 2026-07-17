@@ -1,4 +1,6 @@
 import shutil
+from pathlib import Path
+from uuid import uuid4
 
 import pandas as pd
 
@@ -79,6 +81,57 @@ def prepare_for_parquet_export(df: pd.DataFrame) -> pd.DataFrame:
     return export_df
 
 
+def write_golden_dataset(golden: pd.DataFrame, output_path: Path) -> None:
+    """Stage and publish the partitioned golden dataset safely."""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    staging_path = output_path.with_name(
+        f".{output_path.name}-staging-{uuid4().hex}"
+    )
+    backup_path = output_path.with_name(
+        f".{output_path.name}-backup-{uuid4().hex}"
+    )
+    published = False
+
+    try:
+        prepare_for_parquet_export(golden).to_parquet(
+            staging_path,
+            partition_cols=["company_origin"],
+            index=False,
+        )
+
+        staged_dataset = pd.read_parquet(
+            staging_path,
+            columns=["employee_id"],
+        )
+        if len(staged_dataset) != len(golden):
+            raise ValueError(
+                "Staged golden dataset row count does not match input: "
+                f"expected={len(golden)} actual={len(staged_dataset)}"
+            )
+
+        if output_path.exists():
+            output_path.rename(backup_path)
+
+        staging_path.rename(output_path)
+        published = True
+    except Exception as publish_error:
+        if backup_path.exists() and not output_path.exists():
+            try:
+                backup_path.rename(output_path)
+            except Exception as restore_error:
+                raise RuntimeError(
+                    "Golden dataset publish and restore both failed; "
+                    f"the previous dataset remains at {backup_path}"
+                ) from restore_error
+        raise
+    finally:
+        if staging_path.exists():
+            shutil.rmtree(staging_path)
+        if published and backup_path.exists():
+            shutil.rmtree(backup_path)
+
+
 def build_probable_matches_export(probable_matches: pd.DataFrame) -> pd.DataFrame:
     """
     Convert internal probable match records into the HR-facing required schema.
@@ -112,9 +165,12 @@ def build_probable_matches_export(probable_matches: pd.DataFrame) -> pd.DataFram
     if probable_matches_export.empty:
         return pd.DataFrame(columns=export_columns)
 
-    probable_matches_export["similarity_score"] = probable_matches_export[
-        "name_similarity_score"
-    ].fillna(100.0)
+    if "name_similarity_score" in probable_matches_export.columns:
+        probable_matches_export["similarity_score"] = probable_matches_export[
+            "name_similarity_score"
+        ].fillna(100.0)
+    else:
+        probable_matches_export["similarity_score"] = 100.0
 
     probable_matches_export["recommended_action"] = "HR_REVIEW"
 
@@ -361,16 +417,7 @@ def main() -> None:
     )
 
     golden_output_path = PROCESSED_DATA_DIR / "golden_employee_dataset"
-    golden_for_export = prepare_for_parquet_export(golden)
-
-    if golden_output_path.exists():
-        shutil.rmtree(golden_output_path)
-
-    golden_for_export.to_parquet(
-        golden_output_path,
-        partition_cols=["company_origin"],
-        index=False,
-    )
+    write_golden_dataset(golden, golden_output_path)
 
     ghost_records.to_csv(
         REPORTS_DATA_DIR / "ghost_employee_records.csv",
