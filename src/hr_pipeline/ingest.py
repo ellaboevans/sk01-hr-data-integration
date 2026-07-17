@@ -6,6 +6,7 @@ from typing import Any
 import pandas as pd
 
 from hr_pipeline.config import RAW_FILES
+from hr_pipeline.config import STANDARD_EMPLOYEE_COLUMNS
 from hr_pipeline.utils.logging import get_logger
 
 logger = get_logger(__name__)
@@ -22,7 +23,6 @@ def _ensure_standard_columns(df: pd.DataFrame) -> pd.DataFrame:
     Ensure that the DataFrame has all standard employee columns, adding any
     missing columns with pd.NA values.
     """
-    from hr_pipeline.config import STANDARD_EMPLOYEE_COLUMNS
     
     df = df.copy()  # Avoid modifying the original DataFrame
     
