@@ -1,12 +1,12 @@
 import re
 import unicodedata
+from datetime import date
+from pathlib import Path
 
 import pandas as pd
 
+from hr_pipeline.config import COMPANY_PREFIXES, EXCHANGE_RATES_TO_USD
 from hr_pipeline.utils.logging import get_logger
-from hr_pipeline.config import EXCHANGE_RATES_TO_USD
-from datetime import date
-from pathlib import Path
 
 logger = get_logger(__name__)
 
@@ -52,11 +52,9 @@ def normalize_employee_id(value: object, company_origin: object) -> object:
 
     company = str(company_origin).strip()
 
-    if company == "GlobalTech":
-        prefix = "GT"
-    elif company == "AcquiredCo":
-        prefix = "AC"
-    else:
+    prefix = COMPANY_PREFIXES.get(company)
+
+    if prefix is None:
         logger.warning(
             "Unknown company origin for employee ID namespacing: %s",
             company_origin,
@@ -153,7 +151,7 @@ def standardize_date(value: object) -> object:
         logger.warning("Could not parse date: %s", value)
         return pd.NaT
     
-    parsed = parsed.tz_convert(None)  # Convert to naive datetime in local timezone
+    parsed = parsed.tz_convert(None)  # Convert UTC-aware input to naive UTC
     
     min_date = pd.Timestamp("1970-01-01")
     max_date = pd.Timestamp(date.today())
@@ -233,7 +231,10 @@ def normalize_salary_to_usd_annual(
     salary_usd_annual = round(float(amount) * exchange_rate * frequency_multipliers, 2)
     return salary_usd_annual
 
-def clean_standardized_dataframe(df: pd.DataFrame, department_mapping: pd.DataFrame | None = None) -> pd.Dataframe:
+def clean_standardized_dataframe(
+    df: pd.DataFrame,
+    department_mapping: pd.DataFrame | None = None,
+) -> pd.DataFrame:
     """
     Apply core cleaning rules to a standardized employee DataFrame.
 
@@ -242,16 +243,21 @@ def clean_standardized_dataframe(df: pd.DataFrame, department_mapping: pd.DataFr
     """
     
     cleaned = df.copy()
+
+    source_full_name = cleaned["full_name"].apply(normalize_name)
     
     cleaned["first_name"] = cleaned["first_name"].apply(normalize_name)
     cleaned["last_name"] = cleaned["last_name"].apply(normalize_name)
-    cleaned["full_name"] = (
+    derived_full_name = (
         cleaned['first_name'].fillna("").astype(str).str.strip()
         + " "
         + cleaned['last_name'].fillna("").astype(str).str.strip()
+    ).str.strip()
+
+    cleaned["full_name"] = derived_full_name.mask(
+        derived_full_name.eq(""),
+        source_full_name,
     )
-    
-    cleaned['full_name'] = cleaned["full_name"].replace("", pd.NA)
     
     cleaned["email"] = cleaned["email"].astype("string").str.strip().str.lower()
     
