@@ -11,6 +11,41 @@ from hr_pipeline.utils.logging import get_logger
 
 logger = get_logger(__name__)
 
+REQUIRED_SOURCE_COLUMNS = {
+    "globaltech_hris": {
+        "employee_id",
+        "first_name",
+        "last_name",
+        "email",
+        "department",
+        "job_title",
+        "hire_date",
+        "country",
+        "employment_type",
+        "manager_id",
+    },
+    "acquiredco_hris": {
+        "employee_identifier",
+        "name",
+        "contact",
+        "assignment",
+        "employment",
+        "manager_employee_id",
+    },
+    "payroll": {
+        "employee_id",
+        "source",
+        "base_salary",
+        "currency",
+        "pay_frequency",
+        "effective_date",
+    },
+    "benefits": {
+        "employee_id",
+        "enrollment_date",
+    },
+}
+
 def _handle_missing_file(file_path: Path, source_name: str) -> pd.DataFrame:
     """
     Return an empty DataFrame and log an error when a source file is missing.
@@ -379,6 +414,22 @@ def align_all_sources(raw_dataframes: dict[str, pd.DataFrame]) -> dict[str, pd.D
     aligned_dataframes = {}
     
     for source_name, df in raw_dataframes.items():
+        if df.empty:
+            aligned_dataframes[source_name] = _ensure_standard_columns(df)
+            logger.warning(
+                "Skipping schema alignment for empty source: %s",
+                source_name,
+            )
+            continue
+
+        required_columns = REQUIRED_SOURCE_COLUMNS.get(source_name, set())
+        missing_columns = sorted(required_columns - set(df.columns))
+
+        if missing_columns:
+            raise ValueError(
+                f"{source_name} is missing required columns: {missing_columns}"
+            )
+
         if source_name == "globaltech_hris":
             aligned_dataframes[source_name] = align_globaltech_schema(df)
         elif source_name == "acquiredco_hris":
